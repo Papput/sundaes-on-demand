@@ -1,10 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '../../../test-utils/testing-library-utils';
 import userEvent from '@testing-library/user-event';
-import { OrderDetailsProvider } from '../../../contexts/OrderDetails';
 import Options from '../Options';
 
 test('update scoop subtotal when scoops change', async () => {
-    render(<Options optionType="scoops" />, { wrapper: OrderDetailsProvider });
+    render(<Options optionType="scoops" />);
 
     // make sure total starts out $0.00
     const scoopsSubtotal = screen.getByText('Scoops total: $', { exact: false })
@@ -27,3 +26,29 @@ test('update scoop subtotal when scoops change', async () => {
 
     expect(scoopsSubtotal).toHaveTextContent('6.00')
 })
+
+
+test('update topping subtotal when toppings change', async () => {
+    render(<Options optionType="toppings" />)
+    
+    // Assert on default toppings subtotal
+    const toppingsSubtotal = screen.getByText('Toppings total: $', { exact: false });
+    expect(toppingsSubtotal).toHaveTextContent('0.00');
+
+    //Find and tick one box and assert on updated subtotal
+    const cherriesCheckbox = await screen.findByRole('checkbox', { name: 'Cherries' });
+    userEvent.click(cherriesCheckbox);
+    expect(toppingsSubtotal).toHaveTextContent('1.50');
+    
+    // tick anothercheckbox and assert on substotal
+    const mAndMsCheckbox = await screen.findByRole('checkbox', { name: 'M&Ms' });
+    userEvent.click(mAndMsCheckbox);
+    expect(toppingsSubtotal).toHaveTextContent('3.00');
+    
+    // click on of the boxes off and assert on subtotal
+    userEvent.click(cherriesCheckbox);
+    expect(toppingsSubtotal).toHaveTextContent('1.50');
+
+});
+
+
