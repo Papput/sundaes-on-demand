@@ -13,7 +13,6 @@ const OrderEntry = ({setOrderPhase}) => {
         scoopsSubTotal === '$0.00' ? setDisabled(true) : setDisabled(false);
     }, [orderDetails.totals.scoops])
 
-
     return (
         <div>
             <h1>Design your Sundae!</h1>

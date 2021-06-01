@@ -52,4 +52,26 @@ test('disable Order Button if no scoops are selected', async () => {
     
     // button disabled
     expect(orderButton).toBeDisabled();
+});
+
+test('Scoops total does not update on invalid value', async () => {
+
+    render(<OrderEntry setOrderPhase={jest.fn()} />)
+
+    // check initial states
+    const VanillaScoop = await screen.findByRole('spinbutton', { name: 'Vanilla'})
+    expect(VanillaScoop).not.toHaveClass('is-invalid')
+
+    
+    const scoopSubTotal = await screen.findByText('Scoops total: ', {exact: false})
+    expect(scoopSubTotal).toHaveTextContent('$0.00');
+    
+    
+    // test that - negative number is invalid
+    userEvent.clear(VanillaScoop)
+    userEvent.type(VanillaScoop, '-5')
+    expect(VanillaScoop).toHaveClass('is-invalid')
+    
+    // scoop subtotal should not increase
+    expect(scoopSubTotal).toHaveTextContent('$0.00');
 })
