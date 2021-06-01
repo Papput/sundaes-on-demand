@@ -38,14 +38,22 @@ test('order phases for happy path', async () => {
     // accept terms and conditions and click button to confirm order
     const termsAndConditionCheckbox = screen.getByRole('checkbox', { name: /I agree to Terms and Conditions/i});
     userEvent.click(termsAndConditionCheckbox);
-    
     const confirmOrderButton = screen.getByRole('button', { name: /confirm order/i });
     userEvent.click(confirmOrderButton);
-
-    // confirm order number on confirmation page
+    
+    // see if page is showing loading spinner
+    const loadingSpinner = screen.getByText('Loading...')
+    expect(loadingSpinner).toBeInTheDocument();
     const orderNumber = await screen.findByRole('heading', { name: /your order number /i });
 
+    
+    // check that loading spinner has disapered
+    const nullLoadingSpinner = screen.queryByText('Loading...')
+    expect(nullLoadingSpinner).not.toBeInTheDocument();
+
+    // confirm order number on confirmation page
     expect(orderNumber).toHaveTextContent(/[0-9]/i)
+
     
     // click "new order" button on confirmation page
     const newOrderButton = screen.getByRole('button', { name: /new order/i });

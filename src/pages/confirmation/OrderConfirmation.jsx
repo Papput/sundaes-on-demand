@@ -40,7 +40,11 @@ const OrderConfirmation = ({setOrderPhase}) => {
     }
 
     if(loading) {
-        return <Spinner />
+        return (
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        )
     }
 
     return (
