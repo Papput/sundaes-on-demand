@@ -39,15 +39,17 @@ const OrderConfirmation = ({setOrderPhase}) => {
         )
     }
 
+    if(loading) {
+        return <Spinner />
+    }
+
     return (
         <>
-          <h1>Thank you</h1>
-          <Spinner />
-          {loading ? <Spinner /> : (
-              <h2>Your order number is {orderNumber}</h2>  
-          )}
+            <h1>Thank you</h1>
+            <h2>Your order number is {orderNumber}</h2>
+            <p style={{ fontSize: '25%' }}>as per our terms and conditions, nothing will happen now</p>
 
-          <Button onClick={handleClick}>Create new order</Button>
+            <Button onClick={handleClick}>Create new order</Button>
         </>
     )
 }

@@ -57,5 +57,7 @@ test('order phases for happy path', async () => {
 
     expect(toppingsSubtotal).toHaveTextContent('0.00');
     expect(scoopsSubtotal).toHaveTextContent('0.00');
-    // do we need to await anything to avoid test errors?
+
+    await screen.findByRole('spinbutton', { name: 'Vanilla' })
+    await screen.findByRole('checkbox', { name: 'M&Ms' })
 })
