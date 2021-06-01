@@ -1,23 +1,7 @@
 import React, { useState } from 'react'
 import { Form, Button, Popover, OverlayTrigger } from 'react-bootstrap'
 
-
-// const popover = (
-//     <Popover id="popover-basic">
-//       <Popover.Header as="h3">Popover right</Popover.Header>
-//       <Popover.Body>
-//         And here's some <strong>amazing</strong> content. It's very engaging.
-//         right?
-//       </Popover.Body>
-//     </Popover>
-//   );
-  
-//   const Example = () => (
-//     <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-//       <Button variant="success">Click me to see</Button>
-//     </OverlayTrigger>
-//   );
-const SummaryForm = () => {
+const SummaryForm = ({setOrderPhase}) => {
     const [checkBoxChecked, setCheckBoxChecked] = useState(false);
 
     const popover = (
@@ -38,8 +22,13 @@ const SummaryForm = () => {
         </span>
     );
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        setOrderPhase('complete');
+    }
+
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <Form.Group controlId="terms-and-conditions">
                 <Form.Check 
                     type="checkbox"
