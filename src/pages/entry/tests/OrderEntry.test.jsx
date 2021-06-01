@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '../../../test-utils/testing-library-uti
 import OrderEntry from '../OrderEntry';
 import { rest } from 'msw';
 import { server } from '../../../mocks/server';
+import userEvent from '@testing-library/user-event';
 
 test('handles error for scoops and toppings route', async () => {
     server.resetHandlers(
@@ -21,3 +22,34 @@ test('handles error for scoops and toppings route', async () => {
     });
 
 });
+
+test('disable Order Button if no scoops are selected', async () => {
+    render(<OrderEntry setOrderPhase={jest.fn()} />)
+
+    // scoop 0
+    const scoopSubTotal = await screen.findByText('Scoops total: ', {exact: false})
+
+    expect(scoopSubTotal).toHaveTextContent('0.00')
+    
+    // button disabled
+    const orderButton = screen.getByRole('button', { name: /order sundae/i} )
+    
+    expect(orderButton).toBeDisabled();
+    
+    // scoop 1
+    const VanillaScoop = await screen.findByRole('spinbutton', { name: 'Vanilla'})
+    userEvent.clear(VanillaScoop);
+    userEvent.type(VanillaScoop, '1')
+    expect(scoopSubTotal).toHaveTextContent('2.00')
+    
+    // button enabled
+    expect(orderButton).toBeEnabled();
+    
+    // scoop 0
+    userEvent.clear(VanillaScoop);
+    userEvent.type(VanillaScoop, '0')
+    expect(scoopSubTotal).toHaveTextContent('0.00')
+    
+    // button disabled
+    expect(orderButton).toBeDisabled();
+})

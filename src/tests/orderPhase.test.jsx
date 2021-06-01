@@ -22,7 +22,7 @@ test('order phases for happy path', async () => {
     
     userEvent.click(orderButton);
     
-    // check summart information based on order 
+    // check summary information based on order 
     const toppingsSummary = await screen.findByText('Toppings: $', { exact: false });
     expect(toppingsSummary).toHaveTextContent('1.50');
     
@@ -68,4 +68,28 @@ test('order phases for happy path', async () => {
 
     await screen.findByRole('spinbutton', { name: 'Vanilla' })
     await screen.findByRole('checkbox', { name: 'M&Ms' })
+});
+
+test('No toppings on the page if no toppings are selected', async () => {
+    render(<App />);
+    // add ice cream scoops and toppings
+
+    const vanillaScoop = await screen.findByRole('spinbutton', { name: 'Vanilla' })
+    
+    userEvent.clear(vanillaScoop);
+    userEvent.type(vanillaScoop, '2');
+    
+    const chocolateScoop = await screen.findByRole('spinbutton', { name: 'Chocolate' })
+    userEvent.clear(chocolateScoop);
+    userEvent.type(chocolateScoop, '1');
+
+    const orderButton = await screen.findByRole('button', { name: /Order Sundae!/i });
+    userEvent.click(orderButton);
+    // check summart information based on order 
+    
+    const scoopsSummary = screen.getByText('Scoops: $', { exact: false });
+    expect(scoopsSummary).toHaveTextContent('6.00');
+    const toppingsSummary = screen.queryByText('Toppings: $', { exact: false });
+    expect(toppingsSummary).not.toBeInTheDocument();
+
 })

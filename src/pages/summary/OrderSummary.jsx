@@ -10,8 +10,8 @@ const OrderSummary = ({setOrderPhase}) => {
         <>
             <h1>Order Summary</h1>
             <OptionsSummary optionType="scoops" />
-            <OptionsSummary optionType="toppings" />
-            <h2>Total: {orderDetails.totals.grandTotal}</h2>
+            {orderDetails.toppings.size > 0 && <OptionsSummary optionType="toppings" />}
+            <h2 className={'mt-2 mb-2'}>Total: {orderDetails.totals.grandTotal}</h2>
             <SummaryForm setOrderPhase={setOrderPhase} />
         </>
     )
